@@ -40,10 +40,12 @@ to solve the problem. The following are the expectations
 
 1. Implement only the `com.thisisnoble.javatest.Orchestrator` interface and any other
 supporting code that is necessary (no need to implement Processor or Publisher interfaces).
-2. Ensure that your code is multi-threaded and can potentially handle a large number of
+2. Solve at-least the 2 sample unit-tests as defined in the src/test/java package. Again
+make any changes to Event interface as you deem fit and necessary for the implementation.
+3. Ensure that your code is thread-safe and can potentially handle a large number of
 events per minute.
-3. Please support your code with unit-tests to prove it works.
-
+4. Please support your code with additional unit-tests to ensure thread safety and other
+design constraints that you have employed in your solution.
 
 ### How to submit your work
 

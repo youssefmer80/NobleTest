@@ -10,7 +10,8 @@ import com.thisisnoble.javatest.processors.RiskProcessor;
 import com.thisisnoble.javatest.processors.ShippingProcessor;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static com.thisisnoble.javatest.util.TestIdGenerator.tradeEventId;
+import static org.junit.Assert.*;
 
 public class SimpleOrchestratorTest {
 
@@ -20,21 +21,27 @@ public class SimpleOrchestratorTest {
         Orchestrator orchestrator = setupOrchestrator();
         orchestrator.setup(testPublisher);
 
-        TradeEvent te = new TradeEvent("trade1", 1000.0);
+        TradeEvent te = new TradeEvent(tradeEventId(), 1000.0);
         orchestrator.receive(te);
         safeSleep(100);
         CompositeEvent ce = (CompositeEvent) testPublisher.getLastEvent();
         assertEquals(te, ce.getParent());
-        assertEquals(3, ce.size());
-        for (Event evt : ce.getChildren()) {
-            if (evt instanceof RiskEvent) {
-                assertEquals(500.0, ((RiskEvent) evt).getRiskValue(), 0.01);
-            } else if (evt instanceof ShippingEvent) {
-                assertEquals(100.0, ((ShippingEvent) evt).getShippingCost(), 0.01);
-            } else if (evt instanceof MarginEvent) {
-                assertEquals(100.0, ((MarginEvent) evt).getMargin(), 0.01);
-            }
-        }
+        assertEquals(5, ce.size());
+        RiskEvent re1 = ce.getChildById("tradeEvt-riskEvt");
+        assertNotNull(re1);
+        assertEquals(50.0, re1.getRiskValue(), 0.01);
+        MarginEvent me1 = ce.getChildById("tradeEvt-marginEvt");
+        assertNotNull(me1);
+        assertEquals(10.0, me1.getMargin(), 0.01);
+        ShippingEvent se1 = ce.getChildById("tradeEvt-shipEvt");
+        assertNotNull(se1);
+        assertEquals(200.0, se1.getShippingCost(), 0.01);
+        RiskEvent re2 = ce.getChildById("tradeEvt-shipEvt-riskEvt");
+        assertNotNull(re2);
+        assertEquals(10.0, re2.getRiskValue(), 0.01);
+        MarginEvent me2 = ce.getChildById("tradeEvt-shipEvt-marginEvt");
+        assertNotNull(me2);
+        assertEquals(2.0, me2.getMargin(), 0.01);
     }
 
     @Test
@@ -43,19 +50,18 @@ public class SimpleOrchestratorTest {
         Orchestrator orchestrator = setupOrchestrator();
         orchestrator.setup(testPublisher);
 
-        ShippingEvent se = new ShippingEvent("ship1", 200.0);
+        ShippingEvent se = new ShippingEvent("ship2", 500.0);
         orchestrator.receive(se);
         safeSleep(100);
         CompositeEvent ce = (CompositeEvent) testPublisher.getLastEvent();
         assertEquals(se, ce.getParent());
         assertEquals(2, ce.size());
-        for (Event evt : ce.getChildren()) {
-            if (evt instanceof ShippingEvent) {
-                assertEquals(210.0, ((ShippingEvent) evt).getShippingCost(), 0.01);
-            } else if (evt instanceof MarginEvent) {
-                assertEquals(20.0, ((MarginEvent) evt).getMargin(), 0.01);
-            }
-        }
+        RiskEvent re2 = ce.getChildById("ship2-riskEvt");
+        assertNotNull(re2);
+        assertEquals(50.0, re2.getRiskValue(), 0.01);
+        MarginEvent me2 = ce.getChildById("ship2-marginEvt");
+        assertNotNull(me2);
+        assertEquals(10.0, me2.getMargin(), 0.01);
     }
 
     private Orchestrator setupOrchestrator() {

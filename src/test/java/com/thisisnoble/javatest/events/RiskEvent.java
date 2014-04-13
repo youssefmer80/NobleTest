@@ -1,6 +1,5 @@
 package com.thisisnoble.javatest.events;
 
-import com.thisisnoble.javatest.util.IdGenerator;
 import com.thisisnoble.javatest.Event;
 
 public class RiskEvent implements Event {
@@ -9,15 +8,10 @@ public class RiskEvent implements Event {
     private final String parentId;
     private final double riskValue;
 
-    public RiskEvent(Event event) {
-        this.id = IdGenerator.generate();
-        TradeEvent te = (TradeEvent) event;
-        this.parentId = te.getId();
-        this.riskValue = calculateRisk(te);
-    }
-
-    private double calculateRisk(TradeEvent event) {
-        return event.getNotional() * 0.5;
+    public RiskEvent(String id, String parentId, double riskValue) {
+        this.id = id;
+        this.parentId = parentId;
+        this.riskValue = riskValue;
     }
 
     public String getId() {

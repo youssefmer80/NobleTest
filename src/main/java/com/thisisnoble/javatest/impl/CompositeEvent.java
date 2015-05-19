@@ -9,7 +9,7 @@ public class CompositeEvent implements Event {
 
     private final String id;
     private final Event parent;
-    private final Map<String, Event> children = new HashMap<>();
+    private final Map<String, Event> children = new HashMap<String, Event>();
 
     public CompositeEvent(String id, Event parent) {
         this.id = id;
@@ -32,6 +32,10 @@ public class CompositeEvent implements Event {
     @SuppressWarnings("unchecked")
     public <E extends Event> E getChildById(String id) {
         return (E) children.get(id);
+    }
+    
+    public Map<String, Event> getChildern(){
+    	return children;
     }
 
     public int size() {

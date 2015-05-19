@@ -22,9 +22,6 @@ public class ShippingEvent implements Event {
         return id;
     }
 
-    public String getParentId() {
-        return parentId;
-    }
 
     public double getShippingCost() {
         return shippingCost;

@@ -18,10 +18,6 @@ public class MarginEvent implements Event {
         return id;
     }
 
-    public String getParentId() {
-        return parentId;
-    }
-
     public double getMargin() {
         return margin;
     }

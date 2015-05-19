@@ -16,7 +16,7 @@ public class RiskProcessor extends AbstractProcessor {
 
     @Override
     public boolean interestedIn(Event event) {
-        return event instanceof TradeEvent || event instanceof ShippingEvent;
+        return  event instanceof RiskEvent;
     }
 
     @Override

@@ -1,11 +1,12 @@
 package com.thisisnoble.javatest.processors;
 
+import static com.thisisnoble.javatest.util.TestIdGenerator.shipEventId;
+
 import com.thisisnoble.javatest.Event;
 import com.thisisnoble.javatest.Orchestrator;
 import com.thisisnoble.javatest.events.MarginEvent;
+import com.thisisnoble.javatest.events.ShippingEvent;
 import com.thisisnoble.javatest.events.TradeEvent;
-
-import static com.thisisnoble.javatest.util.TestIdGenerator.shipEventId;
 
 public class ShippingProcessor extends AbstractProcessor {
 
@@ -15,14 +16,14 @@ public class ShippingProcessor extends AbstractProcessor {
 
     @Override
     public boolean interestedIn(Event event) {
-        return event instanceof TradeEvent;
+        return  event instanceof ShippingEvent ;
     }
 
     @Override
     protected Event processInternal(Event event) {
         String parId = event.getId();
         if (event instanceof TradeEvent)
-            return new MarginEvent(shipEventId(parId), parId, calculateTradeShipping(event));
+            return new ShippingEvent(shipEventId(parId), parId, calculateTradeShipping(event));
         throw new IllegalArgumentException("unknown event for shipping " + event);
     }
 

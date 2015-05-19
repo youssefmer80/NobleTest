@@ -18,9 +18,6 @@ public class RiskEvent implements Event {
         return id;
     }
 
-    public String getParentId() {
-        return parentId;
-    }
 
     public double getRiskValue() {
         return riskValue;

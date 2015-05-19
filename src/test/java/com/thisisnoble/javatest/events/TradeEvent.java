@@ -19,4 +19,5 @@ public class TradeEvent implements Event {
     public double getNotional() {
         return notional;
     }
+
 }
